@@ -1,0 +1,40 @@
+---
+layout: default
+title: tags
+permalink: /tags/
+---
+
+<div class="post-article">
+  <div class="post-article__hero">
+    <h1 class="post-article__title">tags</h1>
+  </div>
+
+  <div class="tags-page">
+    {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+    <div class="tags-page__cloud">
+      {% for tag in all_tags %}
+        <a href="#{{ tag }}" class="tag tag--lg">#{{ tag }}</a>
+      {% endfor %}
+    </div>
+
+    {% for tag in all_tags %}
+      <section class="tags-page__section" id="{{ tag }}">
+        <h2 class="tags-page__tag-title">#{{ tag }}</h2>
+        <div class="tags-page__list">
+          {% for post in site.posts %}
+            {% if post.tags contains tag %}
+              {% include post-card.html post=post %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.tags-page__cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
+.tag--lg { font-size: 13px; padding: 4px 10px; }
+.tags-page__section { margin-bottom: 48px; }
+.tags-page__tag-title { font-size: 16px; font-weight: 500; color: var(--accent); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+</style>

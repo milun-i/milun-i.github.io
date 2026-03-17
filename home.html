@@ -1,0 +1,21 @@
+---
+layout: default
+---
+
+<div class="hero">
+  <h1 class="hero__title">{{ site.title }}</h1>
+  <p class="hero__sub">{{ site.description }}</p>
+</div>
+
+<div class="feed">
+  <div class="feed__header">recent posts</div>
+  {% for post in site.posts limit: 5 %}
+    {% include post-card.html post=post %}
+  {% endfor %}
+
+  {% if site.posts.size > 5 %}
+  <div class="feed__more">
+    <a href="{{ '/posts/' | relative_url }}" class="btn-more">모든 글 보기</a>
+  </div>
+  {% endif %}
+</div>

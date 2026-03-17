@@ -1,0 +1,122 @@
+---
+layout: default
+---
+
+<div class="posts-page">
+  <div class="posts-page__hero">
+    <h1 class="posts-page__title">posts</h1>
+  </div>
+
+  <div class="posts-page__body">
+    <aside class="posts-page__sidebar">
+      <div class="sidebar__section">
+        <div class="sidebar__label">categories</div>
+        {% assign sorted_cats = site.categories | sort %}
+        {% for category in sorted_cats %}
+          {% assign cat_name = category[0] %}
+          {% assign cat_posts = category[1] %}
+          <div class="sidebar__cat-group">
+            <button class="sidebar__cat-btn js-cat-toggle" data-cat="{{ cat_name | slugify }}">
+              <span>{{ cat_name }}</span>
+              <span class="sidebar__cat-count">{{ cat_posts.size }}</span>
+            </button>
+            {% assign subcats = "" | split: "" %}
+            {% for post in cat_posts %}
+              {% if post.categories.size > 1 %}
+                {% assign subcat = post.categories[1] %}
+                {% unless subcats contains subcat %}
+                  {% assign subcats = subcats | push: subcat %}
+                {% endunless %}
+              {% endif %}
+            {% endfor %}
+            {% if subcats.size > 0 %}
+            <div class="sidebar__subcat-list js-subcat-list" id="subcat-{{ cat_name | slugify }}" style="display:none;">
+              {% for subcat in subcats %}
+                <button class="sidebar__subcat-btn js-subcat-btn" data-cat="{{ cat_name | slugify }}" data-subcat="{{ subcat | slugify }}">
+                  {{ subcat }}
+                </button>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__label">tags</div>
+        <div class="sidebar__tags">
+          {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+          {% for tag in all_tags %}
+            <a href="{{ '/tags/#' | append: tag | relative_url }}" class="sidebar__tag">#{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </aside>
+
+    <div class="posts-page__list" id="posts-list">
+      {% for post in site.posts %}
+        <div class="js-post-item"
+          data-cat="{{ post.categories[0] | slugify }}"
+          data-subcat="{{ post.categories[1] | slugify }}">
+          {% include post-card.html post=post %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const catBtns = document.querySelectorAll('.js-cat-toggle');
+  const subBtns = document.querySelectorAll('.js-subcat-btn');
+  const items = document.querySelectorAll('.js-post-item');
+  let activecat = null;
+  let activeSubcat = null;
+
+  function filterPosts() {
+    items.forEach(item => {
+      const cat = item.dataset.cat;
+      const sub = item.dataset.subcat;
+      const catMatch = !activecat || cat === activecat;
+      const subMatch = !activeSubcat || sub === activeSubcat;
+      item.style.display = catMatch && subMatch ? 'block' : 'none';
+    });
+  }
+
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      const subList = document.getElementById('subcat-' + cat);
+
+      if (activecat === cat) {
+        activecat = null;
+        activeSubcat = null;
+        btn.classList.remove('active');
+        if (subList) subList.style.display = 'none';
+      } else {
+        catBtns.forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.js-subcat-list').forEach(l => l.style.display = 'none');
+        activecat = cat;
+        activeSubcat = null;
+        btn.classList.add('active');
+        if (subList) subList.style.display = 'flex';
+      }
+      subBtns.forEach(b => b.classList.remove('active'));
+      filterPosts();
+    });
+  });
+
+  subBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sub = btn.dataset.subcat;
+      if (activeSubcat === sub) {
+        activeSubcat = null;
+        btn.classList.remove('active');
+      } else {
+        subBtns.forEach(b => b.classList.remove('active'));
+        activeSubcat = sub;
+        btn.classList.add('active');
+      }
+      filterPosts();
+    });
+  });
+</script>
