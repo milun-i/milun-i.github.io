@@ -105,7 +105,7 @@ img { max-width: 100%; display: block; }
 /* ===== POST CARD ===== */
 .post-card {
   display: grid;
-  grid-template-columns: 1fr 112px;
+  grid-template-columns: minmax(0, 1fr) 112px;
   gap: 20px;
   align-items: start;
   padding: 20px 18px;
@@ -404,7 +404,7 @@ pre code {
 @media (max-width: 700px) {
   .site-nav { padding: 0 20px; }
   .hero, .feed { padding-left: 20px; padding-right: 20px; }
-  .post-card { grid-template-columns: 1fr 80px; gap: 12px; padding: 16px 14px; }
+  .post-card { grid-template-columns: minmax(0, 1fr) 80px; gap: 12px; padding: 16px 14px; }
   .post-card__thumb, .post-card__img { width: 80px; }
   .posts-page__body { grid-template-columns: 1fr; }
   .posts-page__sidebar { position: static; height: auto; border-right: none; border-bottom: 0.5px solid var(--border); padding: 20px; }

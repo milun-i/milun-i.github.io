@@ -29,7 +29,7 @@ permalink: /tags/
 
     <div class="tags-page__list" id="tags-list">
       {% for post in site.posts %}
-        <div class="js-tag-item hidden" data-tags="{{ post.tags | join: ',' }}">
+        <div class="js-tag-item" data-tags="{{ post.tags | join: ',' }}">
           {% include post-card.html post=post %}
         </div>
       {% endfor %}
@@ -58,26 +58,33 @@ permalink: /tags/
 .tag-pill--active { color: var(--accent); border-color: var(--accent-border); background: var(--accent-bg); }
 .tag-pill__count { font-size: 10px; color: var(--text-4); }
 .tags-page__list { display: flex; flex-direction: column; }
-.js-tag-item { display: block; }
 .js-tag-item.hidden { display: none; }
 </style>
 
 <script>
   const pills = document.querySelectorAll('.tag-pill');
   const items = document.querySelectorAll('.js-tag-item');
+  let activeTag = null;
 
   function filter(tag) {
-    pills.forEach(p => p.classList.toggle('tag-pill--active', p.dataset.tag === tag));
-    items.forEach(item => {
-      // trim()으로 공백 제거 후 비교
-      const tags = item.dataset.tags.split(',').map(t => t.trim()).filter(t => t !== '');
-      item.classList.toggle('hidden', !tags.includes(tag));
-    });
+    if (activeTag === tag) {
+      // 같은 태그 다시 클릭 → 전체 해제
+      activeTag = null;
+      pills.forEach(p => p.classList.remove('tag-pill--active'));
+      items.forEach(item => item.classList.remove('hidden'));
+    } else {
+      activeTag = tag;
+      pills.forEach(p => p.classList.toggle('tag-pill--active', p.dataset.tag === tag));
+      items.forEach(item => {
+        const tags = item.dataset.tags.split(',').map(t => t.trim()).filter(t => t !== '');
+        item.classList.toggle('hidden', !tags.includes(tag));
+      });
+    }
   }
 
   pills.forEach(pill => pill.addEventListener('click', () => filter(pill.dataset.tag)));
 
-  // URL hash로 직접 진입 (#태그명)
+  // URL hash로 직접 진입
   const hash = decodeURIComponent(location.hash.replace('#', '').trim());
   if (hash) filter(hash);
 </script>
