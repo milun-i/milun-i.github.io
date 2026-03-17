@@ -4,7 +4,7 @@
 {% assign cat_index = cats[0] | downcase | size | modulo: 7 %}
 {% assign accent = cat_colors[cat_index] %}
 
-<a href="{{ post.url | relative_url }}" class="post-card post-card--{{ accent }}">
+<div class="post-card post-card--{{ accent }}" data-url="{{ post.url | relative_url }}">
   <div class="post-card__left">
     <div class="post-card__meta">
       <span class="post-card__cat">
@@ -14,7 +14,7 @@
     </div>
     <h2 class="post-card__title">{{ post.title }}</h2>
     <p class="post-card__excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
-    <div class="post-card__tags" onclick="event.preventDefault(); event.stopPropagation();">
+    <div class="post-card__tags">
       {% for tag in post.tags %}
         <a href="{{ '/tags/' | relative_url }}#{{ tag }}" class="tag">#{{ tag }}</a>
       {% endfor %}
@@ -27,4 +27,4 @@
       <div class="post-card__thumb post-card__thumb--{{ accent }}"></div>
     {% endif %}
   </div>
-</a>
+</div>
