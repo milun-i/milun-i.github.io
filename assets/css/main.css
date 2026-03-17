@@ -30,7 +30,7 @@
   --font-sans: 'Noto Sans KR', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --nav-h: 56px;
+  --nav-h: 64px;
   --max-w: 860px;
   --max-w-post: 720px;
 }
@@ -61,10 +61,10 @@ img { max-width: 100%; display: block; }
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 0.5px solid var(--border);
 }
-.nav-logo { font-size: 15px; font-weight: 500; color: #fff; letter-spacing: -0.3px; }
+.nav-logo { font-size: 17px; font-weight: 500; color: #fff; letter-spacing: -0.3px; }
 .nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 24px; }
-.nav-links a { font-size: 13px; color: var(--text-2); transition: color 0.15s; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { font-size: 14px; color: var(--text-2); transition: color 0.15s; }
 .nav-links a:hover, .nav-links a.active { color: var(--text-1); }
 
 /* ===== HERO (홈) ===== */
@@ -392,9 +392,9 @@ pre code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 32px;
+  padding: 24px 32px;
   border-top: 0.5px solid var(--border);
-  font-size: 12px;
+  font-size: 13px;
 }
 .footer-logo { font-weight: 500; color: var(--text-3); }
 .footer-logo span { color: var(--accent); opacity: 0.6; }

@@ -4,37 +4,110 @@ title: tags
 permalink: /tags/
 ---
 
-<div class="post-article">
-  <div class="post-article__hero">
-    <h1 class="post-article__title">tags</h1>
+<div class="tags-page">
+  <div class="tags-page__hero">
+    <h1 class="tags-page__title">tags</h1>
   </div>
 
-  <div class="tags-page">
-    {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+  <div class="tags-page__body">
     <div class="tags-page__cloud">
+      {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+      <button class="tag-pill tag-pill--active" data-tag="__all__">전체</button>
       {% for tag in all_tags %}
-        <a href="#{{ tag }}" class="tag tag--lg">#{{ tag }}</a>
+        {% assign count = 0 %}
+        {% for post in site.posts %}
+          {% if post.tags contains tag %}
+            {% assign count = count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+        <button class="tag-pill" data-tag="{{ tag }}">
+          #{{ tag }}<span class="tag-pill__count">{{ count }}</span>
+        </button>
       {% endfor %}
     </div>
 
-    {% for tag in all_tags %}
-      <section class="tags-page__section" id="{{ tag }}">
-        <h2 class="tags-page__tag-title">#{{ tag }}</h2>
-        <div class="tags-page__list">
-          {% for post in site.posts %}
-            {% if post.tags contains tag %}
-              {% include post-card.html post=post %}
-            {% endif %}
-          {% endfor %}
+    <div class="tags-page__list" id="tags-list">
+      {% for post in site.posts %}
+        <div class="js-tag-item" data-tags="{{ post.tags | join: ',' }}">
+          {% include post-card.html post=post %}
         </div>
-      </section>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 <style>
-.tags-page__cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
-.tag--lg { font-size: 13px; padding: 4px 10px; }
-.tags-page__section { margin-bottom: 48px; }
-.tags-page__tag-title { font-size: 16px; font-weight: 500; color: var(--accent); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+.tags-page__hero {
+  padding: 36px 32px 24px;
+  border-bottom: 0.5px solid var(--border);
+}
+.tags-page__title {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.02em;
+}
+.tags-page__body {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 28px 32px 64px;
+}
+.tags-page__cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 0.5px solid var(--border);
+}
+.tag-pill {
+  font-size: 12px;
+  font-family: var(--font-sans);
+  color: var(--text-3);
+  background: var(--bg-card);
+  border: 0.5px solid var(--border-md);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.tag-pill:hover { color: var(--text-1); border-color: var(--text-4); }
+.tag-pill--active {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+.tag-pill__count {
+  font-size: 10px;
+  color: var(--text-4);
+}
+.tags-page__list { display: flex; flex-direction: column; }
+.js-tag-item { display: block; }
+.js-tag-item.hidden { display: none; }
 </style>
+
+<script>
+  const pills = document.querySelectorAll('.tag-pill');
+  const items = document.querySelectorAll('.js-tag-item');
+
+  function filter(tag) {
+    pills.forEach(p => {
+      p.classList.toggle('tag-pill--active', p.dataset.tag === tag);
+    });
+    items.forEach(item => {
+      const tags = item.dataset.tags.split(',').map(t => t.trim());
+      const show = tag === '__all__' || tags.includes(tag);
+      item.classList.toggle('hidden', !show);
+    });
+  }
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => filter(pill.dataset.tag));
+  });
+
+  const hash = location.hash.replace('#', '');
+  if (hash) filter(hash);
+</script>

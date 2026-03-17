@@ -2,6 +2,7 @@
   <a href="{{ '/' | relative_url }}" class="nav-logo">miluni<span>.log</span></a>
   <nav class="nav-links">
     <a href="{{ '/posts/' | relative_url }}" {% if page.url contains '/posts' %}class="active"{% endif %}>posts</a>
+    <a href="{{ '/tags/' | relative_url }}" {% if page.url contains '/tags' %}class="active"{% endif %}>tags</a>
     <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>about</a>
   </nav>
 </header>
