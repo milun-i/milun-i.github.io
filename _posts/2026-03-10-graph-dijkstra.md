@@ -3,7 +3,7 @@ layout: post
 title: "다익스트라(Dijkstra) 알고리즘 — 우선순위 큐 구현"
 date: 2026-03-10 00:00:00 +0900
 categories: [알고리즘, 그래프]
-tags: [dijkstra, graph, priority-queue, BOJ]
+tags: [BOJ]
 cover_image: ""
 excerpt: "우선순위 큐를 이용한 다익스트라 구현과, 흔히 하는 실수인 visited 배열 처리 방식 정리."
 ---
@@ -17,10 +17,8 @@ excerpt: "우선순위 큐를 이용한 다익스트라 구현과, 흔히 하는
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-
 typedef pair<int,int> pii;
 const int INF = 1e9;
-
 vector<pii> graph[100001];
 int dist[100001];
 
@@ -29,7 +27,6 @@ void dijkstra(int start) {
     fill(dist, dist + 100001, INF);
     dist[start] = 0;
     pq.push({0, start});
-
     while (!pq.empty()) {
         auto [d, u] = pq.top(); pq.pop();
         if (d > dist[u]) continue;

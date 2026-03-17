@@ -11,35 +11,47 @@ layout: default
     <aside class="posts-page__sidebar">
       <div class="sidebar__section">
         <div class="sidebar__label">categories</div>
-        {% assign sorted_cats = site.categories | sort %}
-        {% for category in sorted_cats %}
-          {% assign cat_name = category[0] %}
-          {% assign cat_posts = category[1] %}
-          <div class="sidebar__cat-group">
-            <button class="sidebar__cat-btn js-cat-toggle" data-cat="{{ cat_name | slugify }}">
-              <span>{{ cat_name }}</span>
-              <span class="sidebar__cat-count">{{ cat_posts.size }}</span>
-            </button>
-            {% assign subcats = "" | split: "" %}
-            {% for post in cat_posts %}
-              {% if post.categories.size > 1 %}
-                {% assign subcat = post.categories[1] %}
-                {% unless subcats contains subcat %}
-                  {% assign subcats = subcats | push: subcat %}
-                {% endunless %}
-              {% endif %}
-            {% endfor %}
-            {% if subcats.size > 0 %}
-            <div class="sidebar__subcat-list js-subcat-list" id="subcat-{{ cat_name | slugify }}" style="display:none;">
-              {% for subcat in subcats %}
-                <button class="sidebar__subcat-btn js-subcat-btn" data-cat="{{ cat_name | slugify }}" data-subcat="{{ subcat | slugify }}">
-                  {{ subcat }}
-                </button>
-              {% endfor %}
-            </div>
-            {% endif %}
+
+        <!-- 알고리즘 -->
+        <div class="sidebar__cat-group">
+          <button class="sidebar__cat-btn js-cat-toggle" data-cat="알고리즘">
+            <span>알고리즘</span>
+            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '알고리즘' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
+          </button>
+          <div class="sidebar__subcat-list js-subcat-list" id="subcat-알고리즘" style="display:none;">
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="기하">기하</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="그래프">그래프</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="DP">DP</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="수학">수학</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="문자열">문자열</button>
           </div>
-        {% endfor %}
+        </div>
+
+        <!-- 체스 -->
+        <div class="sidebar__cat-group">
+          <button class="sidebar__cat-btn js-cat-toggle" data-cat="체스">
+            <span>체스</span>
+            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '체스' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
+          </button>
+          <div class="sidebar__subcat-list js-subcat-list" id="subcat-체스" style="display:none;">
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="오프닝">오프닝</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="엔드게임">엔드게임</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="경기복기">경기복기</button>
+          </div>
+        </div>
+
+        <!-- 컴퓨터공학 -->
+        <div class="sidebar__cat-group">
+          <button class="sidebar__cat-btn js-cat-toggle" data-cat="컴퓨터공학">
+            <span>컴퓨터공학</span>
+            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '컴퓨터공학' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
+          </button>
+          <div class="sidebar__subcat-list js-subcat-list" id="subcat-컴퓨터공학" style="display:none;">
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="시스템프로그래밍">시스템프로그래밍</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="고급프로그래밍">고급프로그래밍</button>
+            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="C++">C++</button>
+          </div>
+        </div>
       </div>
 
       <div class="sidebar__section">
@@ -56,8 +68,8 @@ layout: default
     <div class="posts-page__list" id="posts-list">
       {% for post in site.posts %}
         <div class="js-post-item"
-          data-cat="{{ post.categories[0] | slugify }}"
-          data-subcat="{{ post.categories[1] | slugify }}">
+          data-cat="{{ post.categories[0] }}"
+          data-subcat="{{ post.categories[1] }}">
           {% include post-card.html post=post %}
         </div>
       {% endfor %}
@@ -68,45 +80,45 @@ layout: default
 <script>
   const catBtns = document.querySelectorAll('.js-cat-toggle');
   const subBtns = document.querySelectorAll('.js-subcat-btn');
-  const items = document.querySelectorAll('.js-post-item');
-  let activecat = null;
+  const items   = document.querySelectorAll('.js-post-item');
+  let activeCat    = null;
   let activeSubcat = null;
 
   function filterPosts() {
     items.forEach(item => {
-      const cat = item.dataset.cat;
-      const sub = item.dataset.subcat;
-      const catMatch = !activecat || cat === activecat;
-      const subMatch = !activeSubcat || sub === activeSubcat;
-      item.style.display = catMatch && subMatch ? 'block' : 'none';
+      const catMatch    = !activeCat    || item.dataset.cat    === activeCat;
+      const subcatMatch = !activeSubcat || item.dataset.subcat === activeSubcat;
+      item.style.display = (catMatch && subcatMatch) ? 'block' : 'none';
     });
   }
 
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const cat = btn.dataset.cat;
+      const cat     = btn.dataset.cat;
       const subList = document.getElementById('subcat-' + cat);
 
-      if (activecat === cat) {
-        activecat = null;
+      if (activeCat === cat) {
+        // 같은 대분류 다시 클릭 → 전체 해제
+        activeCat = null;
         activeSubcat = null;
         btn.classList.remove('active');
         if (subList) subList.style.display = 'none';
       } else {
         catBtns.forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.js-subcat-list').forEach(l => l.style.display = 'none');
-        activecat = cat;
+        subBtns.forEach(b => b.classList.remove('active'));
+        activeCat = cat;
         activeSubcat = null;
         btn.classList.add('active');
         if (subList) subList.style.display = 'flex';
       }
-      subBtns.forEach(b => b.classList.remove('active'));
       filterPosts();
     });
   });
 
   subBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
       const sub = btn.dataset.subcat;
       if (activeSubcat === sub) {
         activeSubcat = null;

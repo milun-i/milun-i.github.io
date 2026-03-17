@@ -3,7 +3,7 @@ layout: post
 title: "볼록 껍질(Convex Hull)과 CCW 알고리즘 정리"
 date: 2026-03-15 00:00:00 +0900
 categories: [알고리즘, 기하]
-tags: [convex-hull, ccw, BOJ]
+tags: [BOJ]
 cover_image: ""
 excerpt: "Graham scan과 Andrew's monotone chain의 구현 차이, 그리고 실전 문제에서 어떤 걸 선택해야 하는지."
 ---
