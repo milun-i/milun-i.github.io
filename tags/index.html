@@ -12,23 +12,24 @@ permalink: /tags/
   <div class="tags-page__body">
     <div class="tags-page__cloud">
       {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
-      <button class="tag-pill tag-pill--active" data-tag="__all__">전체</button>
       {% for tag in all_tags %}
-        {% assign count = 0 %}
-        {% for post in site.posts %}
-          {% if post.tags contains tag %}
-            {% assign count = count | plus: 1 %}
-          {% endif %}
-        {% endfor %}
-        <button class="tag-pill" data-tag="{{ tag }}">
-          #{{ tag }}<span class="tag-pill__count">{{ count }}</span>
-        </button>
+        {% unless tag == "" %}
+          {% assign count = 0 %}
+          {% for post in site.posts %}
+            {% if post.tags contains tag %}
+              {% assign count = count | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+          <button class="tag-pill" data-tag="{{ tag }}">
+            #{{ tag }}<span class="tag-pill__count">{{ count }}</span>
+          </button>
+        {% endunless %}
       {% endfor %}
     </div>
 
     <div class="tags-page__list" id="tags-list">
       {% for post in site.posts %}
-        <div class="js-tag-item" data-tags="{{ post.tags | join: ',' }}">
+        <div class="js-tag-item hidden" data-tags="{{ post.tags | join: ',' }}">
           {% include post-card.html post=post %}
         </div>
       {% endfor %}
@@ -37,53 +38,25 @@ permalink: /tags/
 </div>
 
 <style>
-.tags-page__hero {
-  padding: 36px 32px 24px;
-  border-bottom: 0.5px solid var(--border);
-}
-.tags-page__title {
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--text-2);
-  letter-spacing: 0.02em;
-}
-.tags-page__body {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 28px 32px 64px;
-}
+.tags-page__hero { padding: 36px 32px 24px; border-bottom: 0.5px solid var(--border); }
+.tags-page__title { font-size: 22px; font-weight: 500; color: var(--text-2); letter-spacing: 0.02em; }
+.tags-page__body { max-width: var(--max-w); margin: 0 auto; padding: 28px 32px 64px; }
 .tags-page__cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
+  display: flex; flex-wrap: wrap; gap: 7px;
+  margin-bottom: 32px; padding-bottom: 24px;
   border-bottom: 0.5px solid var(--border);
 }
 .tag-pill {
-  font-size: 12px;
-  font-family: var(--font-sans);
-  color: var(--text-3);
-  background: var(--bg-card);
-  border: 0.5px solid var(--border-md);
-  padding: 4px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+  font-size: 12px; font-family: var(--font-sans);
+  color: var(--text-3); background: var(--bg-card);
+  border: 0.5px solid var(--border-md); padding: 4px 10px;
+  border-radius: 4px; cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+  display: inline-flex; align-items: center; gap: 5px;
 }
 .tag-pill:hover { color: var(--text-1); border-color: var(--text-4); }
-.tag-pill--active {
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-bg);
-}
-.tag-pill__count {
-  font-size: 10px;
-  color: var(--text-4);
-}
+.tag-pill--active { color: var(--accent); border-color: var(--accent-border); background: var(--accent-bg); }
+.tag-pill__count { font-size: 10px; color: var(--text-4); }
 .tags-page__list { display: flex; flex-direction: column; }
 .js-tag-item { display: block; }
 .js-tag-item.hidden { display: none; }
@@ -94,20 +67,17 @@ permalink: /tags/
   const items = document.querySelectorAll('.js-tag-item');
 
   function filter(tag) {
-    pills.forEach(p => {
-      p.classList.toggle('tag-pill--active', p.dataset.tag === tag);
-    });
+    pills.forEach(p => p.classList.toggle('tag-pill--active', p.dataset.tag === tag));
     items.forEach(item => {
-      const tags = item.dataset.tags.split(',').map(t => t.trim());
-      const show = tag === '__all__' || tags.includes(tag);
-      item.classList.toggle('hidden', !show);
+      // trim()으로 공백 제거 후 비교
+      const tags = item.dataset.tags.split(',').map(t => t.trim()).filter(t => t !== '');
+      item.classList.toggle('hidden', !tags.includes(tag));
     });
   }
 
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => filter(pill.dataset.tag));
-  });
+  pills.forEach(pill => pill.addEventListener('click', () => filter(pill.dataset.tag)));
 
-  const hash = location.hash.replace('#', '');
+  // URL hash로 직접 진입 (#태그명)
+  const hash = decodeURIComponent(location.hash.replace('#', '').trim());
   if (hash) filter(hash);
 </script>

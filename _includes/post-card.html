@@ -14,9 +14,9 @@
     </div>
     <h2 class="post-card__title">{{ post.title }}</h2>
     <p class="post-card__excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
-    <div class="post-card__tags">
+    <div class="post-card__tags" onclick="event.preventDefault(); event.stopPropagation();">
       {% for tag in post.tags %}
-        <span class="tag">#{{ tag }}</span>
+        <a href="{{ '/tags/' | relative_url }}#{{ tag }}" class="tag">#{{ tag }}</a>
       {% endfor %}
     </div>
   </div>
