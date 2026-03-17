@@ -12,46 +12,53 @@ layout: default
       <div class="sidebar__section">
         <div class="sidebar__label">categories</div>
 
-        <!-- 알고리즘 -->
-        <div class="sidebar__cat-group">
-          <button class="sidebar__cat-btn js-cat-toggle" data-cat="알고리즘">
-            <span>알고리즘</span>
-            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '알고리즘' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
-          </button>
-          <div class="sidebar__subcat-list js-subcat-list" id="subcat-알고리즘" style="display:none;">
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="기하">기하</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="그래프">그래프</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="DP">DP</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="수학">수학</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="알고리즘" data-subcat="문자열">문자열</button>
-          </div>
-        </div>
+        {% comment %}
+          대분류(categories[0]) 기준으로 그룹핑.
+          site.categories는 모든 카테고리를 flat하게 갖고 있으므로
+          대분류 목록을 먼저 추출하고, 각 대분류별 소분류를 수집한다.
+        {% endcomment %}
 
-        <!-- 체스 -->
-        <div class="sidebar__cat-group">
-          <button class="sidebar__cat-btn js-cat-toggle" data-cat="체스">
-            <span>체스</span>
-            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '체스' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
-          </button>
-          <div class="sidebar__subcat-list js-subcat-list" id="subcat-체스" style="display:none;">
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="오프닝">오프닝</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="엔드게임">엔드게임</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="체스" data-subcat="경기복기">경기복기</button>
-          </div>
-        </div>
+        {% assign top_cats = "" | split: "" %}
+        {% for post in site.posts %}
+          {% assign top = post.categories[0] %}
+          {% unless top_cats contains top %}
+            {% assign top_cats = top_cats | push: top %}
+          {% endunless %}
+        {% endfor %}
+        {% assign top_cats = top_cats | sort %}
 
-        <!-- 컴퓨터공학 -->
-        <div class="sidebar__cat-group">
-          <button class="sidebar__cat-btn js-cat-toggle" data-cat="컴퓨터공학">
-            <span>컴퓨터공학</span>
-            <span class="sidebar__cat-count">{% assign c = 0 %}{% for p in site.posts %}{% if p.categories[0] == '컴퓨터공학' %}{% assign c = c | plus: 1 %}{% endif %}{% endfor %}{{ c }}</span>
-          </button>
-          <div class="sidebar__subcat-list js-subcat-list" id="subcat-컴퓨터공학" style="display:none;">
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="시스템프로그래밍">시스템프로그래밍</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="고급프로그래밍">고급프로그래밍</button>
-            <button class="sidebar__subcat-btn js-subcat-btn" data-cat="컴퓨터공학" data-subcat="C++">C++</button>
+        {% for top in top_cats %}
+          {% assign top_count = 0 %}
+          {% assign subcats = "" | split: "" %}
+          {% for post in site.posts %}
+            {% if post.categories[0] == top %}
+              {% assign top_count = top_count | plus: 1 %}
+              {% if post.categories.size > 1 %}
+                {% assign sub = post.categories[1] %}
+                {% unless subcats contains sub %}
+                  {% assign subcats = subcats | push: sub %}
+                {% endunless %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="sidebar__cat-group">
+            <button class="sidebar__cat-btn js-cat-toggle" data-cat="{{ top }}">
+              <span>{{ top }}</span>
+              <span class="sidebar__cat-count">{{ top_count }}</span>
+            </button>
+            {% if subcats.size > 0 %}
+            <div class="sidebar__subcat-list js-subcat-list" id="subcat-{{ top | slugify }}" style="display:none;">
+              {% assign subcats_sorted = subcats | sort %}
+              {% for sub in subcats_sorted %}
+                <button class="sidebar__subcat-btn js-subcat-btn" data-cat="{{ top }}" data-subcat="{{ sub }}">
+                  {{ sub }}
+                </button>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
-        </div>
+        {% endfor %}
       </div>
 
       <div class="sidebar__section">
@@ -59,7 +66,9 @@ layout: default
         <div class="sidebar__tags">
           {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
           {% for tag in all_tags %}
-            <a href="{{ '/tags/#' | append: tag | relative_url }}" class="sidebar__tag">#{{ tag }}</a>
+            {% unless tag == "" %}
+              <a href="{{ '/tags/#' | append: tag | relative_url }}" class="sidebar__tag">#{{ tag }}</a>
+            {% endunless %}
           {% endfor %}
         </div>
       </div>
@@ -95,10 +104,9 @@ layout: default
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const cat     = btn.dataset.cat;
-      const subList = document.getElementById('subcat-' + cat);
+      const subList = document.getElementById('subcat-' + cat.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9가-힣-]/g, ''));
 
       if (activeCat === cat) {
-        // 같은 대분류 다시 클릭 → 전체 해제
         activeCat = null;
         activeSubcat = null;
         btn.classList.remove('active');
