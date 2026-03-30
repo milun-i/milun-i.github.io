@@ -70,9 +70,8 @@ table.chess tr td.black-marker { background-image: url("/assets/img/chess/black_
 
 /* 체스판 테이블 */
 .post-article__content table.chess {
-  table-layout: fixed !important;
   width: auto !important;
-  max-width: 100% !important;
+  border-collapse: collapse !important;
   border-spacing: 0 !important;
   margin: 40px auto !important;
 }
@@ -80,25 +79,36 @@ table.chess tr td.black-marker { background-image: url("/assets/img/chess/black_
 /* 보드 칸: 1:1 비율 + 반응형 너비 */
 .post-article__content table.chess tr td.light,
 .post-article__content table.chess tr td.dark {
-  aspect-ratio: 1 / 1 !important;
-  width: 10vw !important;
-  min-width: 30px !important;
-  max-width: 50px !important;
-  height: auto !important;
+  border: 1px solid #463838 !important;
   padding: 0 !important;
-  line-height: 0 !important;
-  font-size: 0 !important;
-  background-size: 85% !important;
+  
+  width: 45px !important;
+  height: 45px !important;
+  
+  /* 모바일 */
+  @media only screen and (max-width: 800px) {
+    width: 35px !important;
+    height: 35px !important;
+  }
+
   background-repeat: no-repeat !important;
+  background-size: contain !important;
   background-position: center !important;
-  display: table-cell;
+  line-height: 0 !important;
 }
 
 /* 좌표 칸 */
 .post-article__content table.chess tr td.letter,
-.post-article__content table.chess tr td.number {
+.post-article__content table.chess tr td.number,
+.post-article__content table.chess tr td.corner {
   width: auto !important;
   height: auto !important;
   font-size: 12px !important;
   line-height: 1 !important;
+  border: none !important;
+}
+
+.post-article__content table.chess tr td.corner {
+  width: 20px !important;
+  height: 20px !important;
 }

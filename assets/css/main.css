@@ -93,7 +93,7 @@ img { max-width: 100%; display: block; }
 }
 .feed__header {
   font-size: 11px;
-  color: var(--text-4);
+  color: var(--text-3);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 20px 0 16px;
@@ -228,7 +228,7 @@ img { max-width: 100%; display: block; }
 .sidebar__section { margin-bottom: 28px; }
 .sidebar__label {
   font-size: 10px;
-  color: var(--text-4);
+  color: var(--text-3);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -252,7 +252,7 @@ img { max-width: 100%; display: block; }
 }
 .sidebar__cat-btn:hover,
 .sidebar__cat-btn.active { background: var(--bg-subtle); color: var(--text-1); }
-.sidebar__cat-count { font-size: 11px; color: var(--text-4); }
+.sidebar__cat-count { font-size: 11px; color: var(--text-3); }
 .sidebar__subcat-list { flex-direction: column; padding-left: 10px; margin-top: 2px; }
 .sidebar__subcat-btn {
   background: none;
@@ -293,7 +293,7 @@ img { max-width: 100%; display: block; }
 }
 .post-article__meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .post-article__cat  { font-size: 12px; color: var(--accent); font-weight: 500; }
-.post-article__date { font-size: 12px; color: var(--text-4); }
+.post-article__date { font-size: 12px; color: var(--text-3); }
 .post-article__title {
   font-size: 28px;
   font-weight: 500;
@@ -421,7 +421,7 @@ pre code {
 }
 .post-nav__item:hover { border-color: var(--border-md); }
 .post-nav__item--next { text-align: right; }
-.post-nav__label { font-size: 11px; color: var(--text-4); }
+.post-nav__label { font-size: 11px; color: var(--text-3); }
 .post-nav__title { font-size: 13px; color: var(--text-1); line-height: 1.4; }
 
 /* ===== FOOTER ===== */
