@@ -281,6 +281,19 @@ img { max-width: 100%; display: block; }
 .sidebar__tag:hover { color: var(--accent); border-color: var(--accent-border); }
 
 /* ===== POST ARTICLE ===== */
+@media screen and (min-width: 1024px) {
+    .post-article {
+        max-width: 900px !important;
+        margin: 0 auto !important;
+        padding: 60px 0 !important;
+    }
+
+    .post-article__content {
+        font-size: 17px !important;
+        line-height: 1.8 !important;
+    }
+}
+
 .post-article {
   max-width: var(--max-w-post);
   margin: 0 auto;
