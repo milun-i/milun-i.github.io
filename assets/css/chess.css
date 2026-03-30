@@ -84,7 +84,6 @@ table.chess tr td.black-marker { background-image: url("/assets/img/chess/black_
   width: 10vw !important;
   min-width: 30px !important;
   max-width: 50px !important;
-  height: auto !important;
   padding: 0 !important;
   line-height: 0 !important;
   font-size: 0 !important;

@@ -427,15 +427,19 @@ pre code {
 /* ===== FOOTER ===== */
 .site-footer {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 24px 32px;
+  justify-content: center;
+  padding: 40px 20px;
   border-top: 0.5px solid var(--border);
   font-size: 13px;
+  color: var(--text-4);
 }
-.footer-logo { font-weight: 500; color: var(--text-3); }
-.footer-logo span { color: var(--accent); opacity: 0.6; }
-.footer-copy { color: var(--text-4); }
+
+.footer-contact {
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
 
 /* ===== MathJax ===== */
 .post-article__content mjx-container {
