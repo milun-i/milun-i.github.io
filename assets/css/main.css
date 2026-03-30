@@ -415,7 +415,7 @@ pre code {
   .site-footer { padding: 16px 20px; }
 }
 
-.post-content {
+#post-content {
     text-align: justify;
     text-justify: inter-word;
     word-break: break-all;
