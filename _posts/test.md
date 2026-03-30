@@ -1,0 +1,15 @@
+---
+layout: post
+title: test
+date: 2026-03-30 17:43:14 +09:00
+categories:
+  - Algorithm
+tags:
+  - Test
+---
+
+# test
+
+테스트 포스팅입니다. 아래는 로컬 이미지 테스트입니다.
+
+![테스트 이미지](/assets/img/posts/test/test.png)
