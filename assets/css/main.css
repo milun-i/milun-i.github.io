@@ -414,3 +414,9 @@ pre code {
   .post-nav { grid-template-columns: 1fr; }
   .site-footer { padding: 16px 20px; }
 }
+
+.post-content {
+    text-align: justify;
+    text-justify: inter-word;
+    word-break: break-all;
+}

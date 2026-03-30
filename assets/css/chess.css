@@ -1,3 +1,18 @@
+.post-article__content table.chess {
+    margin: 40px auto !important;
+    border-collapse: collapse;
+    width: auto !important;
+}
+
+.post-article__content table.chess tr td {
+    padding: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 table.chess {
   border-spacing: 0px;
   margin-left: auto;
