@@ -448,10 +448,12 @@ pre code {
 }
 
 /* ===== POST CONTENT ===== */
-#post-content {
-  text-align: justify;
-  text-justify: inter-word;
-  word-break: break-all;
+#post-content, 
+.post-article__content {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
 }
 
 /* ===== RESPONSIVE ===== */
