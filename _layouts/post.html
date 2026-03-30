@@ -2,15 +2,22 @@
 layout: default
 ---
 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <article class="post-article">
-  <div class="post-article__hero">
+
+  <header class="post-article__hero">
     <div class="post-article__meta">
       <span class="post-article__cat">
-        {% for cat in page.categories %}{{ cat }}{% unless forloop.last %} · {% endunless %}{% endfor %}
+        {% assign cats = page.categories %}
+        {% for cat in cats %}{{ cat }}{% unless forloop.last %} · {% endunless %}{% endfor %}
       </span>
       <span class="post-article__date">{{ page.date | date: "%Y.%m.%d" }}</span>
     </div>
+
     <h1 class="post-article__title">{{ page.title }}</h1>
+
     {% if page.tags.size > 0 %}
     <div class="post-article__tags">
       {% for tag in page.tags %}
@@ -18,14 +25,16 @@ layout: default
       {% endfor %}
     </div>
     {% endif %}
-    {% if page.cover_image and page.cover_image != "" %}
+
+    {% if page.cover_image != "" and page.cover_image %}
     <div class="post-article__cover">
       <img src="{{ page.cover_image | relative_url }}" alt="{{ page.title }}">
     </div>
     {% endif %}
-  </div>
+  </header>
 
   <div class="post-article__body">
+
     <div class="post-article__toc-wrap">
       <details class="toc" open>
         <summary class="toc__label">목차</summary>
@@ -36,6 +45,7 @@ layout: default
     <div class="post-article__content" id="post-content">
       {{ content }}
     </div>
+
   </div>
 
   <nav class="post-nav">
@@ -52,21 +62,21 @@ layout: default
     </a>
     {% endif %}
   </nav>
+
 </article>
 
 <script>
   // 자동 목차 생성
-  const content = document.getElementById('post-content');
+  const headings = document.querySelectorAll('#post-content h2, #post-content h3');
   const tocContent = document.getElementById('toc-content');
-  const headings = content.querySelectorAll('h2, h3');
 
   if (headings.length > 0) {
     const ul = document.createElement('ul');
     headings.forEach((h, i) => {
       if (!h.id) h.id = 'heading-' + i;
       const li = document.createElement('li');
-      li.className = h.tagName === 'H3' ? 'toc__item toc__item--sub' : 'toc__item';
-      li.innerHTML = '<a href="#' + h.id + '">' + h.textContent + '</a>';
+      li.className = 'toc__item' + (h.tagName === 'H3' ? ' toc__item--sub' : '');
+      li.innerHTML = `<a href="#${h.id}">${h.textContent}</a>`;
       ul.appendChild(li);
     });
     tocContent.appendChild(ul);
