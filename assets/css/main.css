@@ -129,7 +129,7 @@ img { max-width: 100%; display: block; }
 .post-card__left { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .post-card__meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .post-card__cat  { font-size: 11px; font-weight: 500; }
-.post-card__date { font-size: 11px; color: var(--text-4); }
+.post-card__date { font-size: 11px; color: var(--text-3); }
 .post-card__title   { font-size: 15px; font-weight: 500; color: var(--text-1); line-height: 1.45; }
 .post-card__excerpt {
   font-size: 13px;
@@ -433,7 +433,7 @@ pre code {
   padding: 40px 20px;
   border-top: 0.5px solid var(--border);
   font-size: 13px;
-  color: var(--text-4);
+  color: var(--text-3);
 }
 
 .footer-contact {
